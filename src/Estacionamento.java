@@ -13,15 +13,20 @@ public class Estacionamento {
 	}
 
 	public void entraUmCarro(String placa) throws CarroDuplicadoException, EstacionamentoLotadoException, PlacaInvalidaException {
-		try {
-			getPosicaoCarro(placa);
-			throw new CarroDuplicadoException();
-		} catch (CarroInexistenteException e) {
-			Carro carro = new Carro(placa);
-			carros[getPosicaoVaga()] = carro;
-		}
+		Carro carro = new Carro(placa);
+		if (isCarroEstacionado(carro))	throw new CarroDuplicadoException();
+		carros[getPosicaoVaga()] = carro;
 	}
 	
+	private boolean isCarroEstacionado(Carro carro) {
+		try {
+			getPosicaoCarro(carro.getPlaca());
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	public void sairUmCarro(String placa) throws CarroInexistenteException, PlacaInvalidaException {
 		int posicaoCarro = getPosicaoCarro(placa);
 		carros[posicaoCarro] = null;
